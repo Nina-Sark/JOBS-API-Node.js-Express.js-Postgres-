@@ -1,0 +1,7 @@
+exports.INSERT_DATA_INTO_PROFILE =
+  "INSERT INTO profile_details (user_id, field_of_expertise, description, age, gender, country, city, state, postal_code) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING profile_id, user_id, field_of_expertise, description, age, CASE WHEN gender = 'F' THEN 'Female' ELSE 'Male' END as gender, country, city, state, postal_code";
+exports.UPDATE_PROFILE =
+  "UPDATE profile_details SET field_of_expertise = $1, description = $2, age = $3, gender = $4, country = $5, city = $6, state = $7, postal_code = $8 WHERE profile_id = $9 AND user_id = $10 RETURNING profile_id, user_id, field_of_expertise, description, age, CASE WHEN gender = 'F' THEN 'Female' ELSE 'Male' END as gender, country, city, state, postal_code";
+exports.GET_PROFILE_DATA =
+  "SELECT u.user_id, u.email, u.first_name || ' ' || u.last_name as full_name, u.role, u.rating, u.number_of_reviews, p.profile_id, p.field_of_expertise, p.description, p.age, CASE WHEN p.gender = 'F' THEN 'Female' ELSE 'Male' END AS gender, p.country, p.city, p.state, p.postal_code FROM users u JOIN profile_details p USING (user_id) WHERE user_id = $1 AND profile_id = $2";
+exports.GET_USER_BY_EXPERTISE = "SELECT u.user_id, u.email, u.first_name || ' ' || u.last_name AS fullname, u.role, u.rating, u.number_of_reviews, pd.* FROM users u JOIN profile_details pd USING (user_id) WHERE field_of_expertise LIKE $1";
